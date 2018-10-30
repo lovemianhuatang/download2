@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.longwang.dao.AdConfigMapper">
+  <resultMap id="BaseResultMap" type="com.longwang.entity.AdConfig">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="ad_img" jdbcType="VARCHAR" property="adImg" />
+    <result column="is_show" jdbcType="INTEGER" property="isShow" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, ad_img, is_show, remark, url, add_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ad_config
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from ad_config
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.longwang.entity.AdConfig">
+    insert into ad_config (id, name, ad_img, 
+      is_show, remark, url, 
+      add_time)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{adImg,jdbcType=VARCHAR}, 
+      #{isShow,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{addTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.longwang.entity.AdConfig">
+    insert into ad_config
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="adImg != null">
+        ad_img,
+      </if>
+      <if test="isShow != null">
+        is_show,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="adImg != null">
+        #{adImg,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null">
+        #{isShow,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.longwang.entity.AdConfig">
+    update ad_config
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="adImg != null">
+        ad_img = #{adImg,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null">
+        is_show = #{isShow,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.longwang.entity.AdConfig">
+    update ad_config
+    set name = #{name,jdbcType=VARCHAR},
+      ad_img = #{adImg,jdbcType=VARCHAR},
+      is_show = #{isShow,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="findAll" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select * from ad_config
+    <where>
+      <if test="name != null and name != ''">
+        name like '%${name}%'
+      </if>
+    </where>
+  </select>
+
+</mapper>

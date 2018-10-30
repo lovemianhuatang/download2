@@ -1,0 +1,47 @@
+<table cellspacing="0" cellpadding="0" border="0" class="layui-table" lay-skin="line">
+	<thead>
+	<tr>
+		<th width="5%">
+			<input type="checkbox"  lay-filter="allCheck" name="all" lay-skin="primary">
+		</th>
+		<th >ip地址 </th>
+		<th>省市区</th>
+		<th>创建时间</th>
+		<th  width="20%">
+			操作
+		</th>
+	</tr>
+	</thead>
+	<tbody id="list-body" >
+	<tr th:each="m:${data.data.list}" th:if="${data.data.total} > 0">
+		<td>
+			<input type="checkbox" name="ids" th:value="${m.id}" lay-skin="primary" title="" >
+		</td>
+		<td th:text="${m.ip}">1</td>
+		<td th:text="${m.address}">1</td>
+		<td th:text="${#dates.format(m.addTime,'yyyy-MM-dd HH:mm:ss')}">123</td>
+		<td>
+
+			<button class="layui-btn layui-btn-xs layui-btn-warm" type="button" th:onclick="'details('+${m.id}+')'" >
+				<i class="layui-icon layui-icon-edit"></i>
+				详细
+			</button>
+
+			<button class="layui-btn layui-btn-xs layui-btn-danger" type="button" th:onclick="'deleteOne('+${m.id}+')'" >
+				<i class="layui-icon layui-icon-delete"></i>
+				删除
+			</button>
+		</td>
+	</tr>
+	<tr th:if="${data.data.total} <= 0">
+		<td colspan="5">
+			暂无数据！
+		</td>
+	</tr>
+	<tr style="display:none;">
+		<td colspan="5">
+			<input type="hidden" id="count" name="count" th:value="${data.data.total}" />
+		</td>
+	</tr>
+	</tbody>
+</table>

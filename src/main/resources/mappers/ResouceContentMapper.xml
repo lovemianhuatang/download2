@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.longwang.dao.ResouceContentMapper">
+  <resultMap id="BaseResultMap" type="com.longwang.entity.ResouceContent">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="seo_keyword" jdbcType="VARCHAR" property="seoKeyword" />
+    <result column="seo_description" jdbcType="VARCHAR" property="seoDescription" />
+    <result column="thumbnail_img" jdbcType="VARCHAR" property="thumbnailImg" />
+    <result column="click_count" jdbcType="INTEGER" property="clickCount" />
+    <result column="author" jdbcType="VARCHAR" property="author" />
+    <result column="is_show" jdbcType="INTEGER" property="isShow" />
+    <result column="is_home" jdbcType="INTEGER" property="isHome" />
+    <result column="is_news" jdbcType="INTEGER" property="isNews" />
+    <result column="site_type" jdbcType="INTEGER" property="siteType" />
+    <result column="is_recommend" jdbcType="INTEGER" property="isRecommend" />
+    <result column="class_pid" jdbcType="VARCHAR" property="classPid" />
+    <result column="summary" jdbcType="LONGVARCHAR" property="summary" />
+    <result column="description" jdbcType="LONGVARCHAR" property="description" />
+    <association property="resouceCatalog" javaType="com.longwang.entity.ResouceCatalog" column="catalog_id" jdbcType="BIGINT" select="com.longwang.dao.ResouceCatalogMapper.selectByPrimaryKey" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, title, add_time, seo_keyword, seo_description, thumbnail_img, click_count, author, 
+    is_show, is_home, is_news, catalog_id, site_type, is_recommend, class_pid
+  </sql>
+  <sql id="Blob_Column_List">
+    summary, description
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from resouce_content
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from resouce_content
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.longwang.entity.ResouceContent">
+    insert into resouce_content (id, title, add_time, 
+      seo_keyword, seo_description, thumbnail_img, 
+      click_count, author, is_show, 
+      is_home, is_news, catalog_id, 
+      site_type, is_recommend, class_pid, 
+      summary, description)
+    values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}, 
+      #{seoKeyword,jdbcType=VARCHAR}, #{seoDescription,jdbcType=VARCHAR}, #{thumbnailImg,jdbcType=VARCHAR}, 
+      #{clickCount,jdbcType=INTEGER}, #{author,jdbcType=VARCHAR}, #{isShow,jdbcType=INTEGER}, 
+      #{isHome,jdbcType=INTEGER}, #{isNews,jdbcType=INTEGER}, #{resouceCatalog.id,jdbcType=INTEGER},
+      #{siteType,jdbcType=INTEGER}, #{isRecommend,jdbcType=INTEGER}, #{classPid,jdbcType=VARCHAR}, 
+      #{summary,jdbcType=LONGVARCHAR}, #{description,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.longwang.entity.ResouceContent">
+    insert into resouce_content
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+      <if test="seoKeyword != null">
+        seo_keyword,
+      </if>
+      <if test="seoDescription != null">
+        seo_description,
+      </if>
+      <if test="thumbnailImg != null">
+        thumbnail_img,
+      </if>
+      <if test="clickCount != null">
+        click_count,
+      </if>
+      <if test="author != null">
+        author,
+      </if>
+      <if test="isShow != null">
+        is_show,
+      </if>
+      <if test="isHome != null">
+        is_home,
+      </if>
+      <if test="isNews != null">
+        is_news,
+      </if>
+      <if test="resouceCatalog != null and resouceCatalog.id != null">
+        catalog_id,
+      </if>
+      <if test="siteType != null">
+        site_type,
+      </if>
+      <if test="isRecommend != null">
+        is_recommend,
+      </if>
+      <if test="classPid != null">
+        class_pid,
+      </if>
+      <if test="summary != null">
+        summary,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="seoKeyword != null">
+        #{seoKeyword,jdbcType=VARCHAR},
+      </if>
+      <if test="seoDescription != null">
+        #{seoDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbnailImg != null">
+        #{thumbnailImg,jdbcType=VARCHAR},
+      </if>
+      <if test="clickCount != null">
+        #{clickCount,jdbcType=INTEGER},
+      </if>
+      <if test="author != null">
+        #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null">
+        #{isShow,jdbcType=INTEGER},
+      </if>
+      <if test="isHome != null">
+        #{isHome,jdbcType=INTEGER},
+      </if>
+      <if test="isNews != null">
+        #{isNews,jdbcType=INTEGER},
+      </if>
+      <if test="resouceCatalog != null and resouceCatalog.id != null">
+        #{resouceCatalog.id,jdbcType=INTEGER},
+      </if>
+      <if test="siteType != null">
+        #{siteType,jdbcType=INTEGER},
+      </if>
+      <if test="isRecommend != null">
+        #{isRecommend,jdbcType=INTEGER},
+      </if>
+      <if test="classPid != null">
+        #{classPid,jdbcType=VARCHAR},
+      </if>
+      <if test="summary != null">
+        #{summary,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.longwang.entity.ResouceContent">
+    update resouce_content
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="seoKeyword != null">
+        seo_keyword = #{seoKeyword,jdbcType=VARCHAR},
+      </if>
+      <if test="seoDescription != null">
+        seo_description = #{seoDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbnailImg != null">
+        thumbnail_img = #{thumbnailImg,jdbcType=VARCHAR},
+      </if>
+      <if test="clickCount != null">
+        click_count = #{clickCount,jdbcType=INTEGER},
+      </if>
+      <if test="author != null">
+        author = #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null">
+        is_show = #{isShow,jdbcType=INTEGER},
+      </if>
+      <if test="isHome != null">
+        is_home = #{isHome,jdbcType=INTEGER},
+      </if>
+      <if test="isNews != null">
+        is_news = #{isNews,jdbcType=INTEGER},
+      </if>
+      <if test="resouceCatalog != null and resouceCatalog.id != null">
+        catalog_id = #{resouceCatalog.id,jdbcType=INTEGER},
+      </if>
+      <if test="siteType != null">
+        site_type = #{siteType,jdbcType=INTEGER},
+      </if>
+      <if test="isRecommend != null">
+        is_recommend = #{isRecommend,jdbcType=INTEGER},
+      </if>
+      <if test="classPid != null">
+        class_pid = #{classPid,jdbcType=VARCHAR},
+      </if>
+      <if test="summary != null">
+        summary = #{summary,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.longwang.entity.ResouceContent">
+    update resouce_content
+    set title = #{title,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      seo_keyword = #{seoKeyword,jdbcType=VARCHAR},
+      seo_description = #{seoDescription,jdbcType=VARCHAR},
+      thumbnail_img = #{thumbnailImg,jdbcType=VARCHAR},
+      click_count = #{clickCount,jdbcType=INTEGER},
+      author = #{author,jdbcType=VARCHAR},
+      is_show = #{isShow,jdbcType=INTEGER},
+      is_home = #{isHome,jdbcType=INTEGER},
+      is_news = #{isNews,jdbcType=INTEGER},
+      catalog_id = #{resouceCatalog.id,jdbcType=INTEGER},
+      site_type = #{siteType,jdbcType=INTEGER},
+      is_recommend = #{isRecommend,jdbcType=INTEGER},
+      class_pid = #{classPid,jdbcType=VARCHAR},
+      summary = #{summary,jdbcType=LONGVARCHAR},
+      description = #{description,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.longwang.entity.ResouceContent">
+    update resouce_content
+    set title = #{title,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      seo_keyword = #{seoKeyword,jdbcType=VARCHAR},
+      seo_description = #{seoDescription,jdbcType=VARCHAR},
+      thumbnail_img = #{thumbnailImg,jdbcType=VARCHAR},
+      click_count = #{clickCount,jdbcType=INTEGER},
+      author = #{author,jdbcType=VARCHAR},
+      is_show = #{isShow,jdbcType=INTEGER},
+      is_home = #{isHome,jdbcType=INTEGER},
+      is_news = #{isNews,jdbcType=INTEGER},
+      catalog_id = #{resouceCatalog.id,jdbcType=INTEGER},
+      site_type = #{siteType,jdbcType=INTEGER},
+      is_recommend = #{isRecommend,jdbcType=INTEGER},
+      class_pid = #{classPid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="findAll" resultMap="BaseResultMap">
+    select * from resouce_content where site_type = #{siteType}
+    <if test="title != null and title != ''">
+      and title like '%${title}%'
+    </if>
+  </select>
+
+  <select id="findAllByCatalogId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select * from resouce_content where catalog_id = #{catalogId}
+  </select>
+
+</mapper>

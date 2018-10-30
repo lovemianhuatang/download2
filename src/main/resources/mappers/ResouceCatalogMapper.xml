@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.longwang.dao.ResouceCatalogMapper">
+  <resultMap id="BaseResultMap" type="com.longwang.entity.ResouceCatalog">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="site_type" jdbcType="INTEGER" property="siteType" />
+    <result column="class_pid" jdbcType="VARCHAR" property="classPid" />
+    <association property="pResouceCatalog" javaType="com.longwang.entity.ResouceCatalog" column="pid" jdbcType="BIGINT" select="com.longwang.dao.ResouceCatalogMapper.selectByPrimaryKey" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.longwang.entity.ResouceCatalog">
+    <result column="remark" jdbcType="LONGVARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, add_time, pid, site_type, class_pid
+  </sql>
+  <sql id="Blob_Column_List">
+    remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from resouce_catalog
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from resouce_catalog
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.longwang.entity.ResouceCatalog">
+    insert into resouce_catalog (id, name, add_time, 
+      pid, site_type, class_pid, 
+      remark)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}, 
+      #{pResouceCatalog.id,jdbcType=BIGINT}, #{siteType,jdbcType=INTEGER}, #{classPid,jdbcType=VARCHAR},
+      #{remark,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.longwang.entity.ResouceCatalog">
+    insert into resouce_catalog
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+      <if test="pResouceCatalog != null and pResouceCatalog.id != null">
+        pid,
+      </if>
+      <if test="siteType != null">
+        site_type,
+      </if>
+      <if test="classPid != null">
+        class_pid,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pResouceCatalog != null and pResouceCatalog.id != null">
+        #{pResouceCatalog.id,jdbcType=BIGINT},
+      </if>
+      <if test="siteType != null">
+        #{siteType,jdbcType=INTEGER},
+      </if>
+      <if test="classPid != null">
+        #{classPid,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.longwang.entity.ResouceCatalog">
+    update resouce_catalog
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pResouceCatalog != null and pResouceCatalog.id != null">
+        pid = #{pResouceCatalog.id,jdbcType=BIGINT},
+      </if>
+      <if test="siteType != null">
+        site_type = #{siteType,jdbcType=INTEGER},
+      </if>
+      <if test="classPid != null">
+        class_pid = #{classPid,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.longwang.entity.ResouceCatalog">
+    update resouce_catalog
+    set name = #{name,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      pid = #{pResouceCatalog.id,jdbcType=BIGINT},
+      site_type = #{siteType,jdbcType=INTEGER},
+      class_pid = #{classPid,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.longwang.entity.ResouceCatalog">
+    update resouce_catalog
+    set name = #{name,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      pid = #{pResouceCatalog.id,jdbcType=BIGINT},
+      site_type = #{siteType,jdbcType=INTEGER},
+      class_pid = #{classPid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="findAll" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select * from resouce_catalog where pid = -1
+      <if test="siteType != null">
+        and site_type = #{siteType}
+      </if>
+  </select>
+
+  <select id="findAllByClassPid" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select * from resouce_catalog where class_pid like '%,${classPid},%'
+  </select>
+
+  <select id="findAllByPid" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select * from resouce_catalog where pid = #{pid}
+  </select>
+
+
+</mapper>

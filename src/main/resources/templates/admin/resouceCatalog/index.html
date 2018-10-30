@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head >
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>软咖权限管理系统</title>
+	<link rel="stylesheet" th:href="@{/public/layui/css/layui.css}">
+	<script type="text/javascript" th:src="@{/public/jquery/jquery-1.9.1.min.js}"></script>
+	<script type="text/javascript" th:src="@{/public/artDialog/jquery.artDialog.js(skin=blue)}"></script>
+	<script type="text/javascript" th:src="@{/public/artDialog/plugins/iframeTools.js}"></script>
+	<script type="text/javascript" th:src="@{/public/js/common.js}"></script>
+	<style type="text/css">
+		.cardlist{
+			background: #fff;
+			padding: 10px;
+			box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+		}
+
+		.tab-main{
+			list-style: none;
+		}
+		.tab-main a{
+			display: block;
+			border-radius: 5px;
+			margin: 5px;
+			text-indent: 10px;
+			border: solid 1px #eee;
+		}
+
+		.tab-main a.active{
+			background:#01AAED ;
+			color: #fff;
+		}
+	</style>
+</head>
+<body style="background: #F2F2F2;">
+<form class="layui-form" id="ajaxFrom" style="padding: 10px;" th:action="@{/admin/resouceCatalog/index}">
+	<div class="layui-row" style="margin-bottom: 10px;padding: 5px;background: #fff;">
+				<span class="layui-breadcrumb">
+				  <a href="">系统配置</a>
+				  <a href=""><cite>分类管理</cite></a>
+				</span>
+	</div>
+	<div class="layui-fluid layui-col-space5" style="padding: 0px;">
+		<div class="layui-col-xs3">
+			<div class="layui-card">
+				<div class="layui-card-header">资源类型</div>
+				<div class="layui-card-body">
+					<ul class="tab-main">
+						<li>
+							<a href="javascript:;" onclick="openSiteType(1,this)" class="active">文章</a>
+						</li>
+						<li>
+							<a  href="javascript:;" onclick="openSiteType(2,this)">视频</a>
+						</li>
+						<li>
+							<a  href="javascript:;" onclick="openSiteType(3,this)">软件</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="layui-col-xs9">
+			<div class="layui-fluid cardlist" >
+
+				<div class="layui-row">
+					<fieldset class="layui-elem-field site-demo-button" >
+						<div style="margin-bottom: 10px;margin-left: 5px;margin-top: 5px;">
+							<button onclick="ajaxLoad()" type="button" class="layui-btn layui-btn-sm layui-btn-primary">
+								<i class="layui-icon layui-icon-refresh-3"></i>
+							</button>
+							<button onclick="add()" type="button"  class="layui-btn layui-btn-sm layui-btn-normal">
+								<i class="layui-icon layui-icon-add-1"></i>
+								新增
+							</button>
+							<button class="layui-btn layui-btn-sm" id="btn-expand11" type="button">全部展开</button>
+							<button class="layui-btn layui-btn-sm" id="btn-fold" type="button">全部折叠</button>
+						</div>
+					</fieldset>
+				</div>
+				<div class="layui-row">
+					<div id="tbody-main">
+
+						<!-- 操作列 -->
+						<script type="text/html" id="auth-state">
+							<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+							<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+						</script>
+
+						<table cellspacing="0" lay-filter="auth-table" id="auth-table" cellpadding="0" border="0" class="layui-table" lay-skin="line">
+						</table>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<input type="hidden" name="siteType" id="siteType" value="1">
+</form>
+
+<script th:src="@{/public/layui/layui.all.js}"></script>
+<script type="text/javascript">
+
+
+    function openSiteType(siteType,_this){
+        $("#siteType").val(siteType);
+        $(".tab-main a").removeClass("active");
+        $(_this).addClass("active");
+        ajaxLoad();
+    }
+
+    //新增操作
+    function add(){
+        var siteType=$("#siteType").val();
+        s_open("新增分类","80%","90%","/admin/resouceCatalog/toSave?siteType="+siteType);
+    }
+    //删除操作
+    function deleteOne(id){
+        s_confirm("您是否删除此条数据？",function(){
+            //确认按钮回调方法
+            var url="/admin/resouceCatalog/delete?id="+id;
+            $.post(url,function(resultObj){
+                if(resultObj.status == 1){
+                    layer.msg(resultObj.msg,{time:1000});
+                    ajaxLoad();
+                }else {
+                    layer.msg(resultObj.msg,{time:1000});
+                }
+            });
+        },function(){
+            //取消按钮回调方法
+        });
+    }
+
+    //编辑操作
+    function editor(id){
+        var siteType=$("#siteType").val();
+        s_open("编辑分类","80%","90%","/admin/resouceCatalog/toSave?id="+id+"&siteType="+siteType);
+    }
+
+
+    var form;
+    //分页
+    var laypage;
+    var layer;
+    layui.use(['laypage','form','layer'], function(){
+        laypage = layui.laypage;
+        form = layui.form;
+        layer=layui.layer;
+    });
+    </script>
+
+
+<script type="text/javascript" th:inline="none">
+    var treetable;
+    function ajaxLoad() {
+        treetable.render({
+            treeColIndex: 1,
+            treeSpid: -1,
+            treeIdName: 'id',
+            treePidName: 'pid',
+            elem: '#auth-table',
+            url: '/admin/resouceCatalog/list?siteType=' + $("#siteType").val(),
+            page: false,
+            cols: [[
+                {type: 'numbers'},
+                {field: 'name', minWidth: 200, title: '分类名称'},
+                {field: 'pNmae', title: '父级名称'},
+                {field: 'remark', title: '备注'},
+                {templet: '#auth-state', width: 120, align: 'center', title: '操作'}
+            ]],
+            done: function () {
+                layer.closeAll('loading');
+            }
+        });
+    }
+
+    layui.config({
+        base: '/public/module/'
+    }).extend({
+        treetable: 'treetable-lay/treetable'
+    }).use(['table', 'treetable'], function () {
+        var $ = layui.jquery;
+        var table = layui.table;
+        treetable = layui.treetable;
+        // 渲染表格
+        layer.load(2);
+        treetable.render({
+            treeColIndex: 1,
+            treeSpid: -1,
+            treeIdName: 'id',
+            treePidName: 'pid',
+            elem: '#auth-table',
+            url: '/admin/resouceCatalog/list?siteType='+$("#siteType").val(),
+            page: false,
+            cols: [[
+                {type: 'numbers'},
+                {field: 'name', minWidth: 200, title: '分类名称'},
+                {field: 'pNmae', title: '父级名称'},
+                {field: 'remark', title: '备注'},
+                {templet: '#auth-state', width: 120, align: 'center', title: '操作'}
+            ]],
+            done: function () {
+                layer.closeAll('loading');
+            }
+        });
+
+        $('#btn-expand11').click(function () {
+            treetable.expandAll('#auth-table');
+        });
+
+        $('#btn-fold').click(function () {
+            treetable.foldAll('#auth-table');
+        });
+
+        //监听工具条
+        table.on('tool(auth-table)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+
+            if (layEvent === 'del') {
+                deleteOne(data.id);
+            } else if (layEvent === 'edit') {
+                editor(data.id);
+            }
+        });
+    });
+</script>
+</body>
+</html>

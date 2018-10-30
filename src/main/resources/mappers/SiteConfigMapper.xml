@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.longwang.dao.SiteConfigMapper">
+  <resultMap id="BaseResultMap" type="com.longwang.entity.SiteConfig">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="site_name" jdbcType="VARCHAR" property="siteName" />
+    <result column="seo_keyword" jdbcType="VARCHAR" property="seoKeyword" />
+    <result column="seo_description" jdbcType="VARCHAR" property="seoDescription" />
+    <result column="site_quotation" jdbcType="VARCHAR" property="siteQuotation" />
+    <result column="about_summary" jdbcType="VARCHAR" property="aboutSummary" />
+    <result column="about_dashang" jdbcType="VARCHAR" property="aboutDashang" />
+    <result column="about_erweima" jdbcType="VARCHAR" property="aboutErweima" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, site_name, seo_keyword, seo_description, site_quotation, about_summary, about_dashang, 
+    about_erweima
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from site_config
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from site_config
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.longwang.entity.SiteConfig">
+    insert into site_config (id, site_name, seo_keyword, 
+      seo_description, site_quotation, about_summary, 
+      about_dashang, about_erweima)
+    values (#{id,jdbcType=BIGINT}, #{siteName,jdbcType=VARCHAR}, #{seoKeyword,jdbcType=VARCHAR}, 
+      #{seoDescription,jdbcType=VARCHAR}, #{siteQuotation,jdbcType=VARCHAR}, #{aboutSummary,jdbcType=VARCHAR}, 
+      #{aboutDashang,jdbcType=VARCHAR}, #{aboutErweima,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.longwang.entity.SiteConfig">
+    insert into site_config
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="siteName != null">
+        site_name,
+      </if>
+      <if test="seoKeyword != null">
+        seo_keyword,
+      </if>
+      <if test="seoDescription != null">
+        seo_description,
+      </if>
+      <if test="siteQuotation != null">
+        site_quotation,
+      </if>
+      <if test="aboutSummary != null">
+        about_summary,
+      </if>
+      <if test="aboutDashang != null">
+        about_dashang,
+      </if>
+      <if test="aboutErweima != null">
+        about_erweima,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="siteName != null">
+        #{siteName,jdbcType=VARCHAR},
+      </if>
+      <if test="seoKeyword != null">
+        #{seoKeyword,jdbcType=VARCHAR},
+      </if>
+      <if test="seoDescription != null">
+        #{seoDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="siteQuotation != null">
+        #{siteQuotation,jdbcType=VARCHAR},
+      </if>
+      <if test="aboutSummary != null">
+        #{aboutSummary,jdbcType=VARCHAR},
+      </if>
+      <if test="aboutDashang != null">
+        #{aboutDashang,jdbcType=VARCHAR},
+      </if>
+      <if test="aboutErweima != null">
+        #{aboutErweima,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.longwang.entity.SiteConfig">
+    update site_config
+    <set>
+      <if test="siteName != null">
+        site_name = #{siteName,jdbcType=VARCHAR},
+      </if>
+      <if test="seoKeyword != null">
+        seo_keyword = #{seoKeyword,jdbcType=VARCHAR},
+      </if>
+      <if test="seoDescription != null">
+        seo_description = #{seoDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="siteQuotation != null">
+        site_quotation = #{siteQuotation,jdbcType=VARCHAR},
+      </if>
+      <if test="aboutSummary != null">
+        about_summary = #{aboutSummary,jdbcType=VARCHAR},
+      </if>
+      <if test="aboutDashang != null">
+        about_dashang = #{aboutDashang,jdbcType=VARCHAR},
+      </if>
+      <if test="aboutErweima != null">
+        about_erweima = #{aboutErweima,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.longwang.entity.SiteConfig">
+    update site_config
+    set site_name = #{siteName,jdbcType=VARCHAR},
+      seo_keyword = #{seoKeyword,jdbcType=VARCHAR},
+      seo_description = #{seoDescription,jdbcType=VARCHAR},
+      site_quotation = #{siteQuotation,jdbcType=VARCHAR},
+      about_summary = #{aboutSummary,jdbcType=VARCHAR},
+      about_dashang = #{aboutDashang,jdbcType=VARCHAR},
+      about_erweima = #{aboutErweima,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

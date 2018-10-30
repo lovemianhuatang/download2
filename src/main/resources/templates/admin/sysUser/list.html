@@ -1,0 +1,62 @@
+<table cellspacing="0" cellpadding="0" border="0" class="layui-table" lay-skin="line">
+	<thead>
+	<tr>
+		<th width="5%">
+			<input type="checkbox"  lay-filter="allCheck" name="all" lay-skin="primary">
+		</th>
+		<th >用户名 </th>
+		<th>密码</th>
+		<th>头像</th>
+		<th>创建时间</th>
+		<th>登录时间</th>
+		<th>
+			状态
+		</th>
+		<th  width="20%">
+			操作
+		</th>
+	</tr>
+	</thead>
+	<tbody id="list-body" >
+	<tr th:each="m:${data.data.list}" th:if="${data.data.total}>0">
+		<td>
+			<input type="checkbox" name="ids" th:value="${m.id}" lay-skin="primary" title="" >
+		</td>
+		<td th:text="${m.username}">1</td>
+		<td th:text="${m.password}">admin</td>
+		<td >
+			<img th:src="@{''+${m.headerImg}}" style="width: 30px;height: 30px;">
+		</td>
+		<td th:text="${#dates.format(m.addTime,'yyyy-MM-dd HH:mm:ss')}">123</td>
+		<td th:text="${#dates.format(m.lastLoginTime,'yyyy-MM-dd HH:mm:ss')}">123</td>
+		<td>
+			<div th:if="${m.status} == 1">
+				<input type="checkbox" name="switch" lay-skin="switch" th:attr="checked='checked'" disabled>
+			</div>
+			<div th:if="${m.status} == 0">
+				<input type="checkbox" name="switch" lay-skin="switch" disabled>
+			</div>
+		</td>
+		<td>
+			<button class="layui-btn layui-btn-xs layui-btn-warm" type="button" th:onclick="'editor('+${m.id}+')'" >
+				<i class="layui-icon layui-icon-edit"></i>
+				编辑
+			</button>
+			<button class="layui-btn layui-btn-xs layui-btn-danger" type="button" th:onclick="'deleteOne('+${m.id}+')'" >
+				<i class="layui-icon layui-icon-delete"></i>
+				删除
+			</button>
+		</td>
+	</tr>
+	<tr th:if="${data.data.total} <= 0">
+		<td colspan="8">
+			暂无数据！
+		</td>
+	</tr>
+	<tr style="display:none;">
+		<td colspan="5">
+			<input type="hidden" id="count" name="count" th:value="${data.data.total}" />
+		</td>
+	</tr>
+	</tbody>
+</table>

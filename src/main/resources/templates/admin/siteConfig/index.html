@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head >
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" th:href="@{/public/layui/css/layui.css}">
+	<link rel="stylesheet" th:href="@{/public/validform/css/style.css}">
+	<link rel="stylesheet" th:href="@{/public/webuploader/webuploader.css}">
+</head>
+
+<body>
+<div class="layui-fluid" style="padding: 10px;">
+	<div class="layui-row" style="margin-bottom: 10px;">
+				<span class="layui-breadcrumb">
+				  <a href="">系统配置</a>
+				  <a href=""><cite>站点配置</cite></a>
+				</span>
+	</div>
+	<hr/>
+	<form class="layui-form registerform" action="/admin/siteConfig/save" th:object="${data.data}">
+		<input type="hidden" name="id" th:value="*{id}">
+		<div class="layui-form-item">
+			<label class="layui-form-label">站点名称</label>
+			<div class="layui-input-block">
+				<input type="text" name="siteName" datatype="*" th:value="*{siteName}"   nullmsg="站点名称不能为空！" placeholder="请输入站点名称" class="layui-input">
+				<div class="Validform_checktip"></div>
+			</div>
+		</div>
+
+		<div class="layui-form-item">
+			<label class="layui-form-label">seo关键字</label>
+			<div class="layui-input-block">
+				<input type="text" name="seoKeyword" datatype="*" th:value="*{seoKeyword}"  nullmsg="seo关键字不能为空！" placeholder="请输入seo关键字" class="layui-input">
+				<div class="Validform_checktip"></div>
+			</div>
+		</div>
+
+		<div class="layui-form-item">
+			<label class="layui-form-label">seo描述</label>
+			<div class="layui-input-block">
+				<input type="text" name="seoDescription"  th:value="*{seoDescription}" datatype="*"   nullmsg="seo描述不能为空！" placeholder="请输入seo描述" class="layui-input">
+				<div class="Validform_checktip"></div>
+			</div>
+		</div>
+
+		<div class="layui-form-item">
+			<label class="layui-form-label">每日语录</label>
+			<div class="layui-input-block">
+				<input type="text" name="siteQuotation"  th:value="*{siteQuotation}" datatype="*"  nullmsg="每日语录不能为空！"   placeholder="请输入每日语录" class="layui-input">
+				<div class="Validform_checktip"></div>
+			</div>
+		</div>
+
+		<div class="layui-form-item">
+			<label class="layui-form-label">个人签名</label>
+			<div class="layui-input-block">
+				<textarea type="text" name="aboutSummary" class="layui-textarea" datatype="*"  nullmsg="个人签名不能为空！"   placeholder="请输入个人签名" >[[*{aboutSummary}]]</textarea>
+				<div class="Validform_checktip"></div>
+			</div>
+		</div>
+
+
+		<div class="layui-form-item">
+			<label class="layui-form-label">打赏二维码</label>
+			<div class="layui-input-block">
+				<div id="filePicker1" style="display: inline-block;">上传</div>
+				<div id="uploadlist1" style="display: inline-block;">
+                    <span th:if="*{aboutDashang}!=null">
+                            <img th:src="@{''+*{aboutDashang}}" style="width:30px;height:30px;vertical-align: super;">
+                            <input type="hidden" name="headerImg" th:value="*{aboutDashang}">
+                       </span>
+				</div>
+				<div class="Validform_checktip"></div>
+			</div>
+		</div>
+
+
+		<div class="layui-form-item">
+			<label class="layui-form-label">二维码</label>
+			<div class="layui-input-block">
+				<div id="filePicker2" style="display: inline-block;">上传</div>
+				<div id="uploadlist2" style="display: inline-block;">
+                      <span th:if="*{aboutErweima}!=null">
+                            <img th:src="@{''+*{aboutErweima}}" style="width:30px;height:30px;vertical-align: super;">
+                            <input type="hidden" name="headerImg" th:value="*{aboutErweima}">
+                       </span>
+				</div>
+				<div class="Validform_checktip"></div>
+			</div>
+		</div>
+
+
+
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+				<button class="layui-btn layui-btn-normal" id="btn_sub" lay-submit="" lay-filter="demo1">立即提交</button>
+				<button type="button" onclick="closeWin()" class="layui-btn layui-btn-primary">刷新</button>
+			</div>
+		</div>
+	</form>
+
+
+</div>
+<script type="text/javascript" th:src="@{/public/jquery/jquery-1.9.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/public/artDialog/jquery.artDialog.js(skin=blue)}"></script>
+<script type="text/javascript" th:src="@{/public/artDialog/plugins/iframeTools.js}"></script>
+<script type="text/javascript" th:src="@{/public/validform/Validform_v5.3.2_min.js}"></script>
+<script type="text/javascript" th:src="@{/public/webuploader/webuploader.min.js}"></script>
+<script th:src="@{/public/layui/layui.all.js}"></script>
+<script type="text/javascript">
+    //关闭窗口
+    function closeWin(){
+        window.location.reload();
+    }
+
+
+
+    function uploadFun(classid,callback){
+        var uploader = WebUploader.create({
+            // 选完文件后，是否自动上传。
+            auto: true,
+            // swf文件路径
+            swf: '/public/webuploader/Uploader.swf',
+            // 文件接收服务端。
+            server: '/admin/upload',
+            fileVal:'fileImg',
+            // 选择文件的按钮。可选。
+            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+            pick: classid,
+            // 只允许选择图片文件。
+            accept: {
+                title: 'Images',
+                extensions: 'gif,jpg,jpeg,bmp,png',
+                mimeTypes: 'image/*'
+            }
+        });
+
+        uploader.on( 'uploadSuccess', function( file,response ) {
+            callback(response);
+        });
+    }
+
+
+    var layer;
+    layui.use(['layer'], function() {
+        layer = layui.layer;
+    });
+
+    $(function(){
+
+        uploadFun("#filePicker1",function(response){
+            var html="<img src='"+response.url+"' style='width:30px;height:30px;vertical-align: super;'/><input type='hidden' name='aboutDashang' value='"+response.url+"'>";
+            $("#uploadlist1").html(html);
+        });
+
+        uploadFun("#filePicker2",function(response){
+            var html="<img src='"+response.url+"' style='width:30px;height:30px;vertical-align: super;'/><input type='hidden' name='aboutErweima' value='"+response.url+"'>";
+            $("#uploadlist2").html(html);
+        });
+
+        //表单验证，采用异步提交
+        $(".registerform").Validform({
+            btnSubmit:"#btn_sub",
+            tiptype:function(msg,o,cssctl){
+                if(!o.obj.is("form")){//验证表单元素时o.obj为该表单元素，全部验证通过提交表单时o.obj为该表单对象;
+                    var objtip=o.obj.siblings(".Validform_checktip");
+                    cssctl(objtip,o.type);
+                    objtip.text(msg);
+                }
+            },
+            ajaxPost:true,
+            callback:function(data){ //提交到服务器后回调的方法
+                //返回数据data是json对象，{"info":"demo info","status":"y"}
+                layer.msg(data.msg);
+            }
+        });
+    });
+
+</script>
+</body>
+
+</html>

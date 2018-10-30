@@ -1,0 +1,56 @@
+<table cellspacing="0" cellpadding="0" border="0" class="layui-table" lay-skin="line">
+	<thead>
+	<tr>
+		<th width="5%">
+			<input type="checkbox"  lay-filter="allCheck" name="all" lay-skin="primary">
+		</th>
+		<th >标签名称 </th>
+		<th>标签颜色</th>
+		<th>热门</th>
+		<th>备注</th>
+		<th  width="20%">
+			操作
+		</th>
+	</tr>
+	</thead>
+	<tbody id="list-body" >
+	<tr th:each="m:${data.data.list}" th:if="${data.data.total} > 0">
+		<td>
+			<input type="checkbox" name="ids" th:value="${m.id}" lay-skin="primary" title="" >
+		</td>
+		<td th:text="${m.name}">1</td>
+		<td >
+			<span class="layui-badge" th:style="'background:'+${m.color}" th:text="${m.color}"></span>
+		</td>
+		<td>
+			<div th:if="${m.isNews}==1">
+				<input type="checkbox" name="switch" lay-skin="switch" th:attr="checked='checked'" disabled>
+			</div>
+			<div th:if="${m.isNews}==0">
+				<input type="checkbox" name="switch" lay-skin="switch" disabled>
+			</div>
+		</td>
+		<td th:text="${m.remark}">admin</td>
+		<td>
+			<button class="layui-btn layui-btn-xs layui-btn-warm" type="button" th:onclick="'editor('+${m.id}+')'" >
+				<i class="layui-icon layui-icon-edit"></i>
+				编辑
+			</button>
+			<button class="layui-btn layui-btn-xs layui-btn-danger" type="button" th:onclick="'deleteOne('+${m.id}+')'" >
+				<i class="layui-icon layui-icon-delete"></i>
+				删除
+			</button>
+		</td>
+	</tr>
+	<tr th:if="${data.data.total} <= 0">
+		<td colspan="6">
+			暂无数据！
+		</td>
+	</tr>
+	<tr style="display:none;">
+		<td colspan="5">
+			<input type="hidden" id="count" name="count" th:value="${data.data.total}" />
+		</td>
+	</tr>
+	</tbody>
+</table>

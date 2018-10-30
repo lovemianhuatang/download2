@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.longwang.dao.ResouceLableMapper">
+  <resultMap id="BaseResultMap" type="com.longwang.entity.ResouceLable">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="site_type" jdbcType="INTEGER" property="siteType" />
+    <result column="color" jdbcType="VARCHAR" property="color" />
+    <result column="is_news" jdbcType="INTEGER" property="isNews" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.longwang.entity.ResouceLable">
+    <result column="remark" jdbcType="LONGVARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, site_type, color, is_news
+  </sql>
+  <sql id="Blob_Column_List">
+    remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from resouce_lable
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from resouce_lable
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.longwang.entity.ResouceLable">
+    insert into resouce_lable (id, name, site_type, 
+      color, is_news, remark
+      )
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{siteType,jdbcType=INTEGER}, 
+      #{color,jdbcType=VARCHAR}, #{isNews,jdbcType=INTEGER}, #{remark,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.longwang.entity.ResouceLable">
+    insert into resouce_lable
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="siteType != null">
+        site_type,
+      </if>
+      <if test="color != null">
+        color,
+      </if>
+      <if test="isNews != null">
+        is_news,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="siteType != null">
+        #{siteType,jdbcType=INTEGER},
+      </if>
+      <if test="color != null">
+        #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="isNews != null">
+        #{isNews,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.longwang.entity.ResouceLable">
+    update resouce_lable
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="siteType != null">
+        site_type = #{siteType,jdbcType=INTEGER},
+      </if>
+      <if test="color != null">
+        color = #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="isNews != null">
+        is_news = #{isNews,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.longwang.entity.ResouceLable">
+    update resouce_lable
+    set name = #{name,jdbcType=VARCHAR},
+      site_type = #{siteType,jdbcType=INTEGER},
+      color = #{color,jdbcType=VARCHAR},
+      is_news = #{isNews,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.longwang.entity.ResouceLable">
+    update resouce_lable
+    set name = #{name,jdbcType=VARCHAR},
+      site_type = #{siteType,jdbcType=INTEGER},
+      color = #{color,jdbcType=VARCHAR},
+      is_news = #{isNews,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="findAll" parameterType="com.longwang.entity.ResouceLable" resultMap="ResultMapWithBLOBs">
+    select * from resouce_lable
+    <where>
+      <if test="siteType != null">
+        site_type = #{siteType}
+      </if>
+      <if test="name != null and name != ''">
+        and name like '%${name}%'
+      </if>
+    </where>
+  </select>
+
+
+</mapper>

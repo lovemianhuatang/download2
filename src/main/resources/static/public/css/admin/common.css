@@ -1,0 +1,68 @@
+.layui-layout-admin .layui-header
+{
+	background-color: #1E9FFF!important;
+	border-bottom: solid 1px #E8E9EB;
+	box-shadow: -1px 3px 10px #eee;
+}
+.layui-layout-admin .layui-logo{
+	color: #fff!important;
+	font-size: 18px;
+	font-weight: bold;
+}
+.ssm-menus>a{
+	color: #fff!important;
+}
+.menus-tree{
+	background: #F2F8F8;
+	
+}
+.menus-item{
+	cursor: pointer;
+}
+.sms-yingyingx{
+	box-shadow: 0px 0px 2px #d4d4d4d9;
+}
+.menus-item a{
+	color: #3c3c3c!important
+}
+
+.sys-nav-child{
+	top: 3px!important;
+}
+
+.layui-bg-black{
+	background-color: #fff!important;
+}
+
+.clildFrame {
+    top: 41px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 0;
+}
+.layui-tab-card>.layui-tab-title{
+	background: #fff!important;
+}
+  	.main-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    min-width: 320px;
+    position: absolute;
+}
+
+.layui-nav-itemed>.layui-nav-child{
+	background: #fff!important;
+}
+.layui-nav-tree .layui-nav-item a:hover{
+	background: #e7e9ef!important;
+}
+.layui-this,.layui-this>a{
+	background: #f7f7f7!important;
+	color: #0D9DF6!important;
+	
+}
+.home-tab .layui-tab-close{
+	display: none!important;
+}

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.longwang.dao.ResouceLableContentMapper">
+  <resultMap id="BaseResultMap" type="com.longwang.entity.ResouceLableContent">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <association property="resouceContent" javaType="com.longwang.entity.ResouceContent" column="content_id" jdbcType="BIGINT" select="com.longwang.dao.ResouceContentMapper.selectByPrimaryKey" />
+    <association property="resouceLable" javaType="com.longwang.entity.ResouceLable" column="lable_id" jdbcType="BIGINT" select="com.longwang.dao.ResouceLableMapper.selectByPrimaryKey" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, content_id, lable_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from resouce_lable_content
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from resouce_lable_content
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.longwang.entity.ResouceLableContent">
+    insert into resouce_lable_content (id, content_id, lable_id
+      )
+    values (#{id,jdbcType=BIGINT}, #{resouceContent.id,jdbcType=BIGINT}, #{resouceLable.id,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.longwang.entity.ResouceLableContent">
+    insert into resouce_lable_content
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="resouceContent != null and resouceContent.id != null">
+        content_id,
+      </if>
+      <if test="resouceLable != null and resouceLable.id != null">
+        lable_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="resouceContent != null and resouceContent.id != null">
+        #{resouceContent.id,jdbcType=BIGINT},
+      </if>
+      <if test="resouceLable != null and resouceLable.id != null">
+        #{resouceLable.id,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.longwang.entity.ResouceLableContent">
+    update resouce_lable_content
+    <set>
+      <if test="resouceContent != null and resouceContent.id != null">
+        content_id = #{resouceContent.id,jdbcType=BIGINT},
+      </if>
+      <if test="resouceLable != null and resouceLable.id != null">
+        lable_id = #{resouceLable.id,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.longwang.entity.ResouceLableContent">
+    update resouce_lable_content
+    set content_id = #{resouceContent.id,jdbcType=BIGINT},
+      lable_id = #{resouceLable.id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="findAllByContentId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select * from resouce_lable_content where content_id = #{contentId}
+  </select>
+
+  <delete id="deleteByContentId" parameterType="java.lang.Long">
+    delete from resouce_lable_content where content_id = #{contentId}
+  </delete>
+
+</mapper>

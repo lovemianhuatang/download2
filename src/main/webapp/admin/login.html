@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="utf-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <meta content="" name="description"/>
+    <meta content="" name="keywords"/>
+    <title>登录</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link type="text/css" rel="stylesheet" href="/public/bootstrap/css/bootstrap.css"/>
+    <link type="text/css" rel="stylesheet" href="/public/css/admin/login_admin.css">
+    <script src="/public/jquery/jquery-1.9.1.min.js"></script>
+</head>
+<body>
+<div class="login-content">
+    <div class="login-from">
+        <div class="header-title">
+            <h5 class="title-content">用户登录</h5>
+            <img class="hear-img" src="../public/images/head-img.jpg">
+            </img>
+            <from>
+                 <div class="input-content">
+                     <input id="username" class="user-name" type="text" placeholder="用户名">
+                 </div>
+                <div class="input-content">
+                    <input id="password" class="user-name" type="text" placeholder="密码">
+                </div>
+                <div class="input-content" style="border: 0px;">
+                    <button class="btn btn-default btn-block" id="submit_btn" type="button">
+                        登录
+                    </button>
+                </div>
+                <div class="input-content" style="border: 0px;">
+                    <button style="background:#FF5722;color: #fff;" onclick="javascript:window.location.href='../index.html'" class="btn btn-default btn-block" type="button">
+                     返回首页
+                    </button>
+                </div> 
+                <div class="prompt">为了您更好的体验 <br>请使用<a href="http://w.x.baidu.com/alading/anquan_soft_down_ub/14744" target="_blank" class="special_color">谷歌浏览器</a>或者<a href="http://chrome.360.cn/" target="_blank" class="special_color">360极速浏览器</a></div>
+            </from>
+
+        </div>
+    </div>
+</div>
+<div class="login-buttom">
+    <div class="cut-rule"></div>
+    <div class="copyright">Copyright ©2018&nbsp;湖南源动力科技有限公司</div>
+</div>
+<script src="/public/layui/layui.all.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#submit_btn").click(function () {
+            $.post("/admin/login",{username:$("#username").val(),password:$("#password").val()},function (res) {
+                layui.use('layer', function(){
+                    layer=layui.layer;
+                    if(res.status == 1){
+                        layer.msg(res.msg,{time: 1000}, function(){
+                            window.location.href="/admin/index";
+                        });
+                    }else{
+                        layer.msg(res.msg);
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

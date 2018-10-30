@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" th:href="@{/public/layui/css/layui.css}">
+		<link rel="stylesheet" th:href="@{/public/validform/css/style.css}">
+		<link rel="stylesheet" th:href="@{/public/webuploader/webuploader.css}">
+	</head>
+
+	<body>
+		<div class="layui-fluid">
+			<div class="layui-row" style="margin-bottom: 10px;">
+				<span class="layui-breadcrumb">
+				  <a href="">系统配置</a>
+				  <a href=""><cite>用户管理</cite></a>
+				</span>
+			</div>
+
+			<form class="layui-form registerform" action="/admin/sysUser/save" th:object="${data.data}">
+				<input type="hidden" name="id" th:value="*{id}">
+				<div class="layui-form-item">
+					<label class="layui-form-label">用户名</label>
+					<div class="layui-input-block">
+                <span th:if="*{id} != null">
+                    <input type="text" name="username" th:value="*{username}" datatype="*"  readonly nullmsg="用户名不能为空！" errormsg="用户名已经存在！" placeholder="请输入用户名" class="layui-input">
+                    <div class="Validform_checktip"></div>
+                </span>
+						<span th:if="*{id} == null">
+                    <input type="text" name="username" th:value="*{username}" datatype="*"  ajaxurl="/admin/sysUser/valid" nullmsg="用户名不能为空！" errormsg="用户名已经存在！" placeholder="请输入用户名" class="layui-input">
+                    <div class="Validform_checktip"></div>
+                </span>
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<label class="layui-form-label">密码</label>
+					<div class="layui-input-block">
+						<input type="password" name="password" th:value="*{password}" datatype="*"  nullmsg="密码不能为空！"  placeholder="请输入密码" class="layui-input">
+						<div class="Validform_checktip"></div>
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<label class="layui-form-label">头像</label>
+					<div class="layui-input-block">
+						<div id="filePicker" style="display: inline-block;">上传</div>
+						<div id="uploadlist" style="display: inline-block;">
+                       <span th:if="*{headerImg} != null">
+                            <img th:src="@{''+*{headerImg}}" style="width:30px;height:30px;vertical-align: super;">
+                            <input type="hidden" name="headerImg" th:value="*{headerImg}">
+                       </span>
+						</div>
+						<div class="Validform_checktip"></div>
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<label class="layui-form-label">状态</label>
+					<div class="layui-input-block">
+                <span th:if="*{id} == null">
+                    <input type="radio" name="status" value="1" title="启动" checked="">
+                    <input type="radio" name="status" value="0" title="禁止" >
+                </span>
+				<span th:if="*{id} != null">
+                    <input type="radio" name="status" value="1" title="启动" th:checked="*{status} eq 1">
+                    <input type="radio" name="status" value="0" title="禁止" th:checked="*{status} eq 0">
+                </span>
+						<div class="Validform_checktip"></div>
+					</div>
+				</div>
+
+				<div class="layui-form-item layui-form-text">
+					<label class="layui-form-label">备注</label>
+					<div class="layui-input-block">
+						<textarea placeholder="请输入内容" name="remark" class="layui-textarea">[[*{remark}]]</textarea>
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<button class="layui-btn layui-btn-normal" id="btn_sub" lay-submit="" lay-filter="demo1">立即提交</button>
+						<button type="button" onclick="closeWin()" class="layui-btn layui-btn-primary">关闭</button>
+					</div>
+				</div>
+			</form>
+
+		</div>
+		<script type="text/javascript" th:src="@{/public/jquery/jquery-1.9.1.min.js}"></script>
+		<script type="text/javascript" th:src="@{/public/artDialog/jquery.artDialog.js(skin=blue)}"></script>
+		<script type="text/javascript" th:src="@{/public/artDialog/plugins/iframeTools.js}"></script>
+		<script type="text/javascript" th:src="@{/public/validform/Validform_v5.3.2_min.js}"></script>
+		<script type="text/javascript" th:src="@{/public/webuploader/webuploader.min.js}"></script>
+		<script th:src="@{/public/layui/layui.all.js}"></script>
+		<script type="text/javascript">
+			//关闭窗口
+			function closeWin(){
+				art.dialog.close();
+			}
+
+			$(function(){
+				//表单验证，采用异步提交
+				$(".registerform").Validform({
+					btnSubmit:"#btn_sub", 
+					tiptype:function(msg,o,cssctl){
+						if(!o.obj.is("form")){//验证表单元素时o.obj为该表单元素，全部验证通过提交表单时o.obj为该表单对象;
+							var objtip=o.obj.siblings(".Validform_checktip");
+							cssctl(objtip,o.type);
+							objtip.text(msg);
+						}
+					},
+					ajaxPost:true,
+					callback:function(data){ //提交到服务器后回调的方法
+						//返回数据data是json对象，{"info":"demo info","status":"y"}
+                        layui.use('layer', function(){
+                            layer.msg(data.msg,{time:1000},function () {
+                                if (data.status == 1) {
+                                    //回调父页面方法
+                                    art.dialog.opener.ajaxLoad();
+                                    //关闭窗口
+                                    art.dialog.close();
+                                }
+                            });
+                        });
+					}
+				});
+
+                var uploader = WebUploader.create({
+                    // 选完文件后，是否自动上传。
+                    auto: true,
+                    // swf文件路径
+                    swf: '/public/webuploader/Uploader.swf',
+                    // 文件接收服务端。
+                    server: '/admin/upload',
+                    fileVal:'fileImg',
+                    // 选择文件的按钮。可选。
+                    // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+                    pick: '#filePicker',
+                    // 只允许选择图片文件。
+                    accept: {
+                        title: 'Images',
+                        extensions: 'gif,jpg,jpeg,bmp,png',
+                        mimeTypes: 'image/*'
+                    }
+                });
+
+                uploader.on( 'uploadSuccess', function( file,response ) {
+                    var html="<img src='"+response.url+"' style='width:30px;height:30px;vertical-align: super;'/><input type='hidden' name='headerImg' value='"+response.url+"'>";
+                    $("#uploadlist").html(html);
+                });
+
+			});
+
+		</script>
+	</body>
+
+</html>

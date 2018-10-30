@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>软咖权限管理系统</title>
+  <link rel="stylesheet" href="/public/layui/css/layui.css">
+  <link rel="stylesheet" href="/public/css/admin/common.css" />
+  <script type="text/javascript" src="/public/jquery/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="/public/artDialog/jquery.artDialog.js?skin=blue"></script>
+	<script type="text/javascript" src="/public/artDialog/plugins/iframeTools.js"></script>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin ">
+  <div class="layui-header">
+    <div class="layui-logo">软咖资源管理系统</div>
+ 
+    <ul class="layui-nav layui-layout-right">
+      <li class="layui-nav-item ssm-menus">
+        <a href="javascript:;">
+          <img th:src="@{${session.currentUser.headerImg}}"  class="layui-nav-img">
+          <span th:text="${session.currentUser.username}"></span>
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a href="javascript:void(0)" th:onclick="'editor('+${session.currentUser.id}+')'">基本资料</a></dd>
+          <dd><a href="/">前往首页</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item ssm-menus"><a th:href="@{/admin/logout}">退出</a></li>
+    </ul>
+  </div>
+  
+  <div class="layui-side layui-bg-black" style="bottom: 0px;border: solid 1px #eee;">
+    <div class="layui-side-scroll">
+      <ul class="layui-nav layui-nav-tree menus-tree"  lay-filter="test">
+      	<li class="layui-nav-item layui-nav-itemed menus-item">
+          <a class="sms-yingyingx" >
+          	<i class="layui-icon layui-icon-list"></i>
+          	首页
+          </a>
+				 <dl class="layui-nav-child sys-nav-child">
+            <dd>
+	            	<a href="wrok.html" target="_blank" >
+	            		<i class="layui-icon layui-icon-console"></i>
+	            		控制台
+	            	</a>
+            </dd>
+         </dl>
+      	</li>	 	
+      	 <li class="layui-nav-item layui-nav-itemed menus-item">
+          <a class="sms-yingyingx" >
+          	<i class="layui-icon layui-icon-list"></i>
+          	资源管理
+          </a>
+          <dl class="layui-nav-child sys-nav-child">
+            <dd>
+	            	<a th:href="@{/admin/resouceContent/index?siteType=1}" target="_blank" >
+	            		<i class="layui-icon layui-icon-read"></i>
+	            		文章管理
+	            	</a>
+            </dd>
+            <dd>
+		            <a th:href="@{/admin/resouceContent/index?siteType=3}" target="_blank">
+		            	<i class="layui-icon layui-icon-survey"></i>
+		            	软件管理
+		            </a>
+            </dd>
+            <dd>
+	            <a th:href="@{/admin/resouceContent/index?siteType=2}" target="_blank">
+	            	   <i class="layui-icon layui-icon-video"></i>
+	            	      视频管理
+	            </a>
+            </dd>
+            <dd>
+	            <a th:href="@{/admin/adConfig/index}" target="_blank">
+	            	   <i class="layui-icon layui-icon-find-fill"></i>
+	            	       广告管理
+	            </a>
+            </dd>
+            <dd>
+	            <a th:href="@{/admin/resouceCatalog/index}" target="_blank">
+	            	   <i class="layui-icon layui-icon-website"></i>
+	            	      分类管理
+	            </a>
+            </dd>
+            <dd>
+	            <a th:href="@{/admin/resouceLable/index}" target="_blank">
+	            	   <i class="layui-icon layui-icon-notice"></i>
+	            	    标签管理
+	            </a>
+            </dd>
+			  <dd>
+				  <a th:href="@{/admin/message/index}" target="_blank">
+					  <i class="layui-icon layui-icon-notice"></i>
+					  留言管理
+				  </a>
+			  </dd>
+			  <dd>
+				  <a th:href="@{/admin/linkConfig/index}" target="_blank">
+					  <i class="layui-icon layui-icon-website"></i>
+					  友情链接
+				  </a>
+			  </dd>
+          </dl>
+        </li>
+        
+        <li class="layui-nav-item layui-nav-itemed menus-item">
+          <a class="sms-yingyingx" >
+          	<i class="layui-icon layui-icon-set-sm"></i>
+          	系统配置
+          </a>
+          <dl class="layui-nav-child sys-nav-child">
+            <dd>
+	            	<a th:href="@{/admin/sysUser/index}" target="_blank" >
+	            		<i class="layui-icon layui-icon-username"></i>
+	            		用户管理
+	            	</a>
+            </dd>
+            <dd>
+		            <a th:href="@{/admin/siteConfig/index}" target="_blank">
+		            	<i class="layui-icon layui-icon-util"></i>
+		            	站点配置
+		            </a>
+            </dd>
+            <dd>
+	            <a th:href="@{/admin/userLog/index}" target="_blank">
+	            	   <i class="layui-icon layui-icon-app"></i>
+	            	      登录日志
+	            </a>
+            </dd>
+            <dd>
+	            <a href="http://www.baidu.com" target="_blank">
+	            	   <i class="layui-icon layui-icon-app"></i>
+	            	      文件管理
+	            </a>
+            </dd>
+          </dl>
+        </li>
+      </ul>
+    </div>
+  </div>
+  
+ <div class="layui-body" style="bottom: 0px;">
+   <div class="layui-tab layui-tab-card" lay-filter="tab-menus" style="margin: 0px!important;"  lay-allowClose="true">
+					  <ul class="layui-tab-title" style=" z-index: 9999;">
+					    <li class="layui-this home-tab" lay-id="1538417343045" data-text="控制台">
+	            		<i class="layui-icon layui-icon-console"></i>
+	            		&nbsp;控制台
+					    </li>
+					    
+					  </ul>
+					  <div class="layui-tab-content clildFrame">
+					    <div class="layui-tab-item layui-show"> 
+					       <iframe class="main-iframe" name="mainframe" src="/admin/wrok"></iframe>
+					    </div>
+					  </div>
+					</div>
+  </div>
+  
+</div>
+<script src="/public/layui/layui.all.js"></script>
+<script src="/public/js/admin/index.js"></script>
+<script type="text/javascript" th:src="@{/public/js/common.js}"></script>
+
+<script type="text/javascript">
+
+    //修改资料
+    function editor(id){
+        s_open("修改资料","80%","90%","/admin/sysUser/toSave?id="+id);
+    }
+
+    function ajaxLoad() {
+
+    }
+
+</script>
+</body>
+</html>
+      

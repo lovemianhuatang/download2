@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head >
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>软咖权限管理系统</title>
+    <link rel="stylesheet" th:href="@{/public/layui/css/layui.css}">
+    <script type="text/javascript" th:src="@{/public/jquery/jquery-1.9.1.min.js}"></script>
+    <script type="text/javascript" th:src="@{/public/artDialog/jquery.artDialog.js(skin=blue)}"></script>
+    <script type="text/javascript" th:src="@{/public/artDialog/plugins/iframeTools.js}"></script>
+    <script type="text/javascript" th:src="@{/public/js/common.js}"></script>
+    <style type="text/css">
+        .cardlist{
+            background: #fff;
+            padding: 10px;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+        }
+
+        .tab-main{
+            list-style: none;
+        }
+        .tab-main a{
+            display: block;
+            border-radius: 5px;
+            margin: 5px;
+            text-indent: 10px;
+            border: solid 1px #eee;
+        }
+
+        .tab-main a.active{
+            background:#01AAED ;
+            color: #fff;
+        }
+    </style>
+</head>
+<body style="background: #F2F2F2;">
+<form class="layui-form" id="ajaxFrom" style="padding: 10px;" th:action="@{/admin/resouceContent/resouceLable/list}">
+    <div class="layui-row" style="margin-bottom: 10px;padding: 5px;background: #fff;">
+				<span class="layui-breadcrumb">
+				  <a href="">资源管理</a>
+				  <a href=""><cite>标签管理</cite></a>
+				</span>
+    </div>
+    <div class="layui-fluid " style="padding: 0px;">
+
+        <div class="layui-col-xs12">
+            <div class="layui-fluid cardlist" >
+
+                <div class="layui-row">
+                    <fieldset class="layui-elem-field site-demo-button" >
+                        <div style="margin-bottom: 10px;margin-left: 5px;margin-top: 5px;">
+                            <button onclick="seacher()" type="button" class="layui-btn layui-btn-sm layui-btn-primary">
+                                <i class="layui-icon layui-icon-refresh-3"></i>
+                            </button>
+                            <button onclick="add()" type="button"  class="layui-btn layui-btn-sm layui-btn-normal">
+                                <i class="layui-icon layui-icon-add-1"></i>
+                                新增
+                            </button>
+                            <button onclick="selectedLable()" type="button"  class="layui-btn layui-btn-sm layui-btn-danger">
+                                批量选择
+                            </button>
+
+                            <div style="float: right;margin-right: 10px;">
+                                <input type="text" name="name" class="layui-input" style="height:33px;display: inline-block;width: 230px;" placeholder="标签名称" />
+                                <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" onclick="seacher()">
+                                    <i class="layui-icon layui-icon-search"></i>
+                                    搜索
+                                </button>
+                            </div>
+                        </div>
+
+
+                    </fieldset>
+                </div>
+                <div class="layui-row">
+                    <div id="tbody-main">
+
+                    </div>
+
+                    <!--绑定分页插件层-->
+                    <div style="text-align: right;">
+                        <div id="pager"></div>
+                    </div>
+                    <div style="height: 100px;"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <input type="hidden" name="siteType" id="siteType" th:value="${siteType}">
+    <!--页码数-->
+    <input type="hidden" name="pageNum" id="pageNum" value="1" />
+    <!--显示条数-->
+    <input type="hidden" name="pageSize" id="pageSize" value="10" />
+
+     <div style="position: fixed;bottom: 0px;height: 60px;background: #fff;border-top: solid 1px #eee;width: 100%;left: 0px;">
+         <input type="button" value="关闭" class="layui-btn layui-btn-primary layui-btn-lg" onclick="javascript:art.dialog.close();" style="float: right;margin-top: 5px;margin-right: 10px;">
+     </div>
+</form>
+
+<script th:src="@{/public/layui/layui.all.js}"></script>
+<script type="text/javascript">
+
+
+
+    function selectedOneLable(obj){
+        s_confirm("您是否选择此条标签",function(){
+            //确认按钮回调方法
+            var id=$(obj).attr("data-id");
+            var name=$(obj).attr("data-name");
+            var color=$(obj).attr("data-color");
+            art.dialog.opener.selectedOneLable(id,name,color);
+        },function(){
+            //取消按钮回调方法
+        });
+
+    }
+
+    //新增操作
+    function add(){
+        var siteType=$("#siteType").val();
+        s_open("新增标签","40%","50%","/admin/resouceLable/toSave?siteType="+siteType);
+    }
+
+    function selectedLable(){
+        //确认按钮回调方法
+        //获取选择的复选框
+        var ids=$("#list-body input[name='ids']:checked");
+
+        if(ids.length<=0){
+            layer.msg("请选择需要使用标签！");
+            return;
+        }
+        s_confirm("您是否选择标签？",function(){
+
+            for(var i=0;i<ids.length;i++){
+                var obj=ids[i];
+                var id=$(obj).attr("data-id");
+                var name=$(obj).attr("data-name");
+                var color=$(obj).attr("data-color");
+                art.dialog.opener.selectedOneLable(id,name,color);
+            }
+        },function(){
+            //取消按钮回调方法
+        });
+    }
+
+    //异步刷新列表方法
+    function ajaxLoad(){
+        $("#list-body input[name='ids']:checked").attr("checked",false);
+        $.ajax({
+            type:"get",
+            url:$("#ajaxFrom").attr("action"),
+            data:$("#ajaxFrom").serializeArray(), //获取表单中所有的数据
+            async:true,
+            success:function(resultHtml){
+                $("#tbody-main").html(resultHtml);
+                form.render('checkbox');
+                //执行一个laypage实例
+                laypage.render({
+                    elem: 'pager' //注意，这里的 test1 是 ID，不用加 # 号
+                    ,curr:$("#pageNum").val() //当前页码数
+                    ,count:$("#count").val() //数据总数，从服务端得到
+                    ,limit:$("#pageSize").val()
+                    ,layout: ['count', 'prev', 'page', 'next', 'limit',  'skip']
+                    ,theme: '#FF5722',
+                    jump: function(obj, first){
+                        if(!first){
+                            $("#pageNum").val(obj.curr);
+                            $("#pageSize").val(obj.limit);
+                            ajaxLoad();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    var form;
+    //分页
+    var laypage;
+    var layer;
+    layui.use(['laypage','form','layer'], function(){
+        laypage = layui.laypage;
+        form = layui.form;
+        layer=layui.layer;
+        //全选操作
+        form.on("checkbox(allCheck)",function(data){
+            if(data.elem.checked){  //选中
+                $("#tbody-main input[name='ids']").prop('checked',true);
+                form.render('checkbox');
+            }else{
+                $("#tbody-main input[name='ids']").prop('checked',false);
+                form.render('checkbox');
+            }
+        });
+    });
+
+
+    function seacher(){
+        $("#pageNum").val(1);
+        ajaxLoad();
+    }
+
+    $(function(){
+        ajaxLoad();
+    });
+</script>
+
+</body>
+</html>

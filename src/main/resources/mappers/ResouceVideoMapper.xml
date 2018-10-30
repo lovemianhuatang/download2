@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.longwang.dao.ResouceVideoMapper">
+  <resultMap id="BaseResultMap" type="com.longwang.entity.ResouceVideo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="order_sort" jdbcType="INTEGER" property="orderSort" />
+    <association property="resouceContent" javaType="com.longwang.entity.ResouceContent" column="content_id" jdbcType="BIGINT" select="com.longwang.dao.ResouceContentMapper.selectByPrimaryKey" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, title, url, order_sort, content_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from resouce_video
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from resouce_video
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.longwang.entity.ResouceVideo">
+    insert into resouce_video (id, title, url, 
+      order_sort, content_id)
+    values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{orderSort,jdbcType=INTEGER}, #{resouceContent.id,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.longwang.entity.ResouceVideo">
+    insert into resouce_video
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="orderSort != null">
+        order_sort,
+      </if>
+      <if test="resouceContent != null and resouceContent.id != null">
+        content_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSort != null">
+        #{orderSort,jdbcType=INTEGER},
+      </if>
+      <if test="resouceContent != null and resouceContent.id != null">
+        #{resouceContent.id,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.longwang.entity.ResouceVideo">
+    update resouce_video
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSort != null">
+        order_sort = #{orderSort,jdbcType=INTEGER},
+      </if>
+      <if test="resouceContent != null and resouceContent.id != null">
+        content_id = #{resouceContent.id,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.longwang.entity.ResouceVideo">
+    update resouce_video
+    set title = #{title,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      order_sort = #{orderSort,jdbcType=INTEGER},
+      content_id = #{resouceContent.id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="findAll" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select * from resouce_video
+    <where>
+      <if test="title != null and title != ''">
+        title like '%${title}%'
+      </if>
+    </where>
+  </select>
+
+  <select id="findAllByContentId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select * from resouce_video where content_id = #{contentId} order by order_sort
+  </select>
+
+  <delete id="deleteByContentId" parameterType="java.lang.Long">
+    delete from resouce_video where content_id = #{contentId}
+  </delete>
+
+</mapper>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>软咖权限管理系统</title>
+		<link rel="stylesheet" th:href="@{/public/layui/css/layui.css}">
+		<script type="text/javascript" th:src="@{/public/jquery/jquery-1.9.1.min.js}"></script>
+		<script type="text/javascript" th:src="@{/public/artDialog/jquery.artDialog.js?skin=blue}"></script>
+		<script type="text/javascript" th:src="@{/public/artDialog/plugins/iframeTools.js}"></script>
+		<script type="text/javascript" th:src="@{/public/js/common.js}"></script>
+	</head>
+	<body>
+	<form class="layui-form" id="ajaxFrom" onsubmit="return false" action="/admin/userLog/list">
+		<div class="layui-fluid" style="padding: 10px;">
+			<div class="layui-row" style="margin-bottom: 10px;">
+				<span class="layui-breadcrumb">
+				  <a href="">系统配置</a>
+				  <a href=""><cite>登录日志管理</cite></a>
+				</span>
+			</div>
+			<div class="layui-row">
+				<fieldset class="layui-elem-field site-demo-button" >
+				  <div style="margin-bottom: 10px;margin-left: 5px;margin-top: 5px;">
+				   <button onclick="ajaxLoad()" class="layui-btn layui-btn-sm layui-btn-primary">
+				    	<i class="layui-icon layui-icon-refresh-3"></i>   
+				    </button>
+				  </div>
+				</fieldset>
+			</div>
+			<div class="layui-row">
+				<div id="tbody-main">
+					
+				</div>
+				<!--绑定分页插件层-->
+				<div style="text-align: right;">
+					<div id="pager"></div>
+				</div>
+			</div>
+		</div> 
+		
+		<!--页码数-->
+		<input type="hidden" name="pageNum" id="pageNum" value="1" />
+		<!--显示条数-->
+		<input type="hidden" name="pageSize" id="pageSize" value="10" />
+	</form>
+	
+	<script th:src="@{/public/layui/layui.all.js}"></script>
+		<script type="text/javascript">
+
+			var form;
+			//分页
+			var laypage;
+			var layer;
+			layui.use(['laypage','form','layer'], function(){
+				  laypage = layui.laypage;
+				  form = layui.form;
+				  layer=layui.layer;
+				  //全选操作
+				  form.on("checkbox(allCheck)",function(data){
+				  	 if(data.elem.checked){  //选中
+				  	 	$("#tbody-main input[name='ids']").prop('checked',true);
+				  	 	form.render('checkbox');
+				  	 }else{
+				  	 	$("#tbody-main input[name='ids']").prop('checked',false);
+				  	 	form.render('checkbox');
+				  	 }
+				  });
+			});
+			
+			//异步刷新列表方法
+			function ajaxLoad(){
+                $("#list-body input[name='ids']:checked").attr("checked",false);
+				$.ajax({
+					type:"get",
+					url:$("#ajaxFrom").attr("action"),
+					data:$("#ajaxFrom").serializeArray(), //获取表单中所有的数据
+					async:true,
+					success:function(resultHtml){
+					  $("#tbody-main").html(resultHtml);
+					  form.render('checkbox'); 	
+					  //执行一个laypage实例
+					  laypage.render({
+					    elem: 'pager' //注意，这里的 test1 是 ID，不用加 # 号
+					    ,curr:$("#pageNum").val() //当前页码数
+					    ,count:$("#count").val() //数据总数，从服务端得到
+					    ,limit:$("#pageSize").val()
+					    ,layout: ['count', 'prev', 'page', 'next', 'limit',  'skip']
+					    ,theme: '#FF5722',
+					     jump: function(obj, first){
+					      if(!first){
+					        $("#pageNum").val(obj.curr);
+					        $("#pageSize").val(obj.limit);
+                              ajaxLoad();
+					      }
+					    }
+					  });
+					}
+				});
+			}
+
+			$(function(){
+				ajaxLoad();
+			});
+		 </script>
+	</body>
+</html>

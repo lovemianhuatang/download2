@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.longwang.dao.ResouceDownloadFileMapper">
+  <resultMap id="BaseResultMap" type="com.longwang.entity.ResouceDownloadFile">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+    <result column="file_size" jdbcType="BIGINT" property="fileSize" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="download_count" jdbcType="BIGINT" property="downloadCount" />
+    <result column="ext" jdbcType="VARCHAR" property="ext" />
+    <association property="resouceContent" javaType="com.longwang.entity.ResouceContent" column="content_id" jdbcType="BIGINT" select="com.longwang.dao.ResouceContentMapper.selectByPrimaryKey" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, file_name, file_size, url, download_count, ext, content_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from resouce_download_file
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from resouce_download_file
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.longwang.entity.ResouceDownloadFile">
+    insert into resouce_download_file (id, file_name, file_size, 
+      url, download_count, ext, 
+      content_id)
+    values (#{id,jdbcType=BIGINT}, #{fileName,jdbcType=VARCHAR}, #{fileSize,jdbcType=BIGINT}, 
+      #{url,jdbcType=VARCHAR}, #{downloadCount,jdbcType=BIGINT}, #{ext,jdbcType=VARCHAR}, 
+      #{resouceContent.id,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.longwang.entity.ResouceDownloadFile">
+    insert into resouce_download_file
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="fileName != null">
+        file_name,
+      </if>
+      <if test="fileSize != null">
+        file_size,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="downloadCount != null">
+        download_count,
+      </if>
+      <if test="ext != null">
+        ext,
+      </if>
+      <if test="resouceContent != null and resouceContent.id != null">
+        content_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="fileName != null">
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileSize != null">
+        #{fileSize,jdbcType=BIGINT},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="downloadCount != null">
+        #{downloadCount,jdbcType=BIGINT},
+      </if>
+      <if test="ext != null">
+        #{ext,jdbcType=VARCHAR},
+      </if>
+      <if test="resouceContent != null and resouceContent.id != null">
+        #{resouceContent.id,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.longwang.entity.ResouceDownloadFile">
+    update resouce_download_file
+    <set>
+      <if test="fileName != null">
+        file_name = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileSize != null">
+        file_size = #{fileSize,jdbcType=BIGINT},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="downloadCount != null">
+        download_count = #{downloadCount,jdbcType=BIGINT},
+      </if>
+      <if test="ext != null">
+        ext = #{ext,jdbcType=VARCHAR},
+      </if>
+      <if test="resouceContent != null and resouceContent.id != null">
+        content_id = #{resouceContent.id,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.longwang.entity.ResouceDownloadFile">
+    update resouce_download_file
+    set file_name = #{fileName,jdbcType=VARCHAR},
+      file_size = #{fileSize,jdbcType=BIGINT},
+      url = #{url,jdbcType=VARCHAR},
+      download_count = #{downloadCount,jdbcType=BIGINT},
+      ext = #{ext,jdbcType=VARCHAR},
+      content_id = #{resouceContent.id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="findAll" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select * from resouce_download_file
+    <where>
+      <if test="title != null and title != ''">
+        file_name like '%${title}%'
+      </if>
+    </where>
+  </select>
+
+  <select id="findAllByContentId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select * from resouce_download_file where content_id = #{contentId}
+  </select>
+
+  <delete id="deleteByContentId" parameterType="java.lang.Long">
+    delete from resouce_download_file where content_id = #{contentId}
+  </delete>
+
+</mapper>

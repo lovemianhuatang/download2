@@ -1,0 +1,30 @@
+<table cellspacing="0" cellpadding="0" border="0" class="layui-table" lay-skin="line">
+	<thead>
+	<tr>
+		<th >用户名 </th>
+		<th>登录时间</th>
+		<th>请求ip</th>
+		<th>登录区域</th>
+		<th width="40%">内容</th>
+	</tr>
+	</thead>
+	<tbody id="list-body" >
+	<tr th:each="m:${data.data.list}" th:if="${data.data.total} > 0">
+		<td th:text="${m.sysUser.username}">1</td>
+		<td th:text="${#dates.format(m.addTime,'yyyy-MM-dd HH:mm:ss')}">123</td>
+		<td th:text="${m.ip}">1</td>
+		<td th:text="${m.address}">1</td>
+		<td th:text="${m.content}">123</td>
+	</tr>
+	<tr th:if="${data.data.total} <= 0">
+		<td colspan="5">
+			暂无数据！
+		</td>
+	</tr>
+	<tr style="display:none;">
+		<td colspan="5">
+			<input type="hidden" id="count" name="count" th:value="${data.data.total}" />
+		</td>
+	</tr>
+	</tbody>
+</table>
